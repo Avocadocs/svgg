@@ -2,6 +2,9 @@
 
 **SVGG** is a small utility library for the [V programming language](https://vlang.io) that allows you to load and rasterize SVG files into `gg.Image` objects using the [`gg`](https://modules.vlang.io/gg.html) graphics module.
 
+![Demo screenshot](https://github.com/user-attachments/assets/2187b7cc-2820-4508-9aec-376e8cdb46dd)
+
+
 It uses [memononen/nanosvg](https://github.com/memononen/nanosvg) under the hood for SVG parsing and rasterization.
 
 ## Features
