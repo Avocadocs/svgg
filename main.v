@@ -3,21 +3,23 @@ module svgg
 import gg
 
 pub struct RasterizedImage {
+pub:
 	width  int
 	height int
 	data   []u8
 }
 
 pub struct RasterizeCfg {
+pub:
 	units  string = 'px'
 	dpi    f32    = 96.0
 	width  int    = -1
 	height int    = -1
-mut:
+pub mut:
 	scale f32 = 1.0
 }
 
-fn rasterize_svg_file(file string, cfg RasterizeCfg) RasterizedImage {
+pub fn rasterize_svg_file(file string, cfg RasterizeCfg) RasterizedImage {
 	svg := C.nsvgParseFromFile(file.str, cfg.units.str, cfg.dpi)
 
 	if svg == 0 {
@@ -44,7 +46,7 @@ fn rasterize_svg_file(file string, cfg RasterizeCfg) RasterizedImage {
 	}
 }
 
-fn create_image_from_raw_byte_array(mut ctx gg.Context, buf []u8, w int, h int) gg.Image {
+fn create_image_from_raw_byte_array(mut ctx gg.Context, buf []u8, w int, h int) (gg.Image, int) {
 	mut img := gg.Image{
 		width:       w
 		height:      h
@@ -53,15 +55,23 @@ fn create_image_from_raw_byte_array(mut ctx gg.Context, buf []u8, w int, h int) 
 	}
 
 	img.init_sokol_image()
-	ctx.cache_image(img)
+	id := ctx.cache_image(img)
 
-	return img
+	return img, id
 }
 
 pub fn create_svg_image(mut ctx gg.Context, file string, cfg RasterizeCfg) gg.Image {
 	rasterized_image := rasterize_svg_file(file, cfg)
-	gg_image := create_image_from_raw_byte_array(mut ctx, rasterized_image.data, rasterized_image.width,
+	gg_image, _ := create_image_from_raw_byte_array(mut ctx, rasterized_image.data, rasterized_image.width,
 		rasterized_image.height)
 
 	return gg_image
+}
+
+pub fn create_svg_image_id(mut ctx gg.Context, file string, cfg RasterizeCfg) (gg.Image, int) {
+	rasterized_image := rasterize_svg_file(file, cfg)
+	gg_image, id := create_image_from_raw_byte_array(mut ctx, rasterized_image.data, rasterized_image.width,
+		rasterized_image.height)
+
+	return gg_image, id
 }

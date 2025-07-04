@@ -1,6 +1,11 @@
 module svgg
 
+#flag -I @VROOT
 #flag -I @VROOT/nanosvg
+
+$if windows ? {
+	#include "windows_patch.h"
+}
 
 #define NANOSVG_IMPLEMENTATION
 #include "nanosvg.h"
