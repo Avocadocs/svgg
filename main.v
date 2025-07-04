@@ -9,11 +9,12 @@ pub struct RasterizedImage {
 }
 
 pub struct RasterizeCfg {
+pub:
 	units  string = 'px'
 	dpi    f32    = 96.0
 	width  int    = -1
 	height int    = -1
-mut:
+pub mut:
 	scale f32 = 1.0
 }
 
